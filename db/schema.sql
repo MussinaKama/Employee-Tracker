@@ -9,6 +9,8 @@ CREATE TABLE department
 (
 department_id INT PRIMARY KEY AUTO_INCREMENT,
 name          VARCHAR(30) NOT NULL
+CONSTRAINT fk_role_department FOREIGN KEY (id)
+           REFERENCES role(department_id)
 );
 
 CREATE TABLE role 
@@ -17,10 +19,10 @@ role_id       INT PRIMARY KEY AUTO_INCREMENT,
 title         VARCHAR(30),
 salary        DECIMAL(10, 2),
 department_id INT NOT NULL,
-FOREIGN KEY fk_role_department(department_id)
+CONSTRAINT fk_role_department FOREIGN KEY (department_id)
            REFERENCES department(department_id)
            ON UPDATE CASCADE
-           ON DELETE NO ACTION
+           ON DELETE CASCADE,
 );
 
 
@@ -30,15 +32,15 @@ employee_id INT PRIMARY KEY AUTO_INCREMENT,
 first_name VARCHAR(30) NOT NULL,
 last_name VARCHAR(30) NOT NULL,
 role_id INT NOT NULL,
-FOREIGN KEY fk_employees_role(role_id)
+CONSTRAINT fk_employees_role  FOREIGN KEY (role_id)
 			REFERENCES role(role_id)
             ON UPDATE CASCADE
-            ON DELETE NO ACTION,
-manager_id INT,
-FOREIGN KEY fk_employees_employees(manager_id)
+            ON DELETE CASCADE,
+manager_id INT DEFAULT NULL,
+CONSTRAINT fk_employees_employees FOREIGN KEY (manager_id)
             REFERENCES employees(employee_id)
 			ON UPDATE CASCADE
-            ON DELETE NO ACTION
+            ON DELETE RESTRICT
 )
 
 
