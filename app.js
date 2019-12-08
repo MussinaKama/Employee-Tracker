@@ -45,22 +45,6 @@ const ctable = require("console.table")
           name: "Delete Employee",
           value: "Delete_Employee"
         },
-        // {
-        //   name: "View All Employees By Department",
-        //   value: "VIEW_EMPLOYEES_BY_DEPARTMENT"
-        // },
-        // {
-        //   name: "View All Employees By Manager",
-        //   value: "VIEW_EMPLOYEES_BY_MANAGER"
-        // },
-        // {
-        //   name: "Update Employee Role",
-        //   value: "UPDATE_EMPLOYEE_ROLE"
-        // },
-        // {
-        //   name: "Update Employee Manager",
-        //   value: "UPDATE_EMPLOYEE_MANAGER"
-        // },
         {
           name: "Exit",
           value: "Exit"
@@ -88,37 +72,33 @@ const ctable = require("console.table")
       return deleteEmployeeRole();
     case "Delete_Employee":
       return deleteEmployee();
-    // case "VIEW_EMPLOYEES_BY_DEPARTMENT":
-    //   return viewEmployeesByDepartment();
-    // case "VIEW_EMPLOYEES_BY_MANAGER":
-    //   return viewEmployeesByManager();
-    // case "UPDATE_EMPLOYEE_ROLE":
-    //   return updateEmployeeRole();
-    // case "UPDATE_EMPLOYEE_MANAGER":
-    //   return updateEmployeeManager();
     default:
       return exit();
   }
 }
-//VIEW ALL DEPARTMENTS//
+
+//----------------------------VIEW ALL DEPARTMENTS--------------------------------------------//
 async function viewAllDepartments() {
   const allDepartments = await db.getAllDepartments()
   console.table(allDepartments)
   await runSearch()
 }
-//VIEW ALL EMPLOYEES//
+
+//------------------------------VIEW ALL EMPLOYEES--------------------------------------------//
 async function viewAllEmployees() {
   const allEmployees = await db.getAllEmployees()
   console.table(allEmployees)
   await runSearch()
 }
-//VIEW ALL ROLES//
+
+//---------------------------------------VIEW ALL ROLES---------------------------------------//
 async function viewAllRoles() {
   const allRoles = await db.getAllRoles()
   console.table(allRoles)
   await runSearch()
 }
-//ADD NEW ROLE//
+
+//-------------------------------ADD NEW ROLE--------------------------------------------------//
 async function addRole() {
   const departments = await db.getAllDepartments();
   const departmentChoices = departments.map(({ department_id, name }) => ({
@@ -141,7 +121,6 @@ async function addRole() {
       choices: departmentChoices
     }
   ]);
-  
   await db.createRole(role);
   console.log(`Added ${role.title} to roles table`)
   const roles = await db.getAllRoles()
@@ -149,7 +128,7 @@ async function addRole() {
   await runSearch()
 
 }
-//ADD NEW EMPLOYEE
+//----------------------------------ADD NEW EMPLOYEE------------------------------------//
 async function addEmployee() {
   const roles = await db.getAllRoles();
   const roleChoices = roles.map(({ role_id, title }) => ({
@@ -163,7 +142,6 @@ async function addEmployee() {
     name: first_name + " " + last_name,
 
   }))
-
   const employee = await prompt([
     {
       name: "first_name",
@@ -173,7 +151,6 @@ async function addEmployee() {
       name: "last_name",
       message: "What is your last name ?"
     },
-
     {
       type: "list",
       name: "role_id",
@@ -187,15 +164,13 @@ async function addEmployee() {
       choices: employeeChoice
     },
   ]);
-
   await db.createEmployee(employee);
   console.log(`Added ${employee.first_name, employee.last_name} to employees table`)
   console.table(employees)
   await runSearch()
-
 }
 
-//ADD NEW DEPARTMENT//
+//-------------------------------------ADD NEW DEPARTMENT-----------------------------------------//
 async function addDepartment() {
   const department = await prompt([
     {
@@ -211,7 +186,7 @@ async function addDepartment() {
   await runSearch()
 }
 
-// DELETE DEPARTMENT//
+//-----------------------------------DELETE DEPARTMENT-------------------------------------------------//
 async function deleteDepartment() {
   const departments = await db.getAllDepartments();
   const departmentChoices = departments.map(({name, department_id}) => ({
@@ -234,15 +209,13 @@ async function deleteDepartment() {
   await runSearch()
 }
 
-//DELETE EMPLOYEE//
+//-------------------------------------DELETE EMPLOYEE--------------------------------------//
 async function deleteEmployee() {
   const employees = await db.getAllEmployees();
   const employeeChoice = employees.map(({employee_id, first_name, last_name}) => ({
     value: employee_id,
     name: first_name + " " + last_name
   }))
-
-  
   const employeeId = await prompt([
     {
       type: "list",
@@ -250,21 +223,19 @@ async function deleteEmployee() {
       message: "Which employee would you like to fire ?",
       choices: employeeChoice
     },
-    
   ])
   await db.removeEmployee(employeeId.employee)
   console.log(`Fired ${employeeId.employee} from company`)
   console.table(employees)
   await runSearch()
 }
-
+//-----------------------------------DELETE EMPLOYEE ROLE-----------------------------------//
 async function deleteEmployeeRole() {
   const roles = await db.getAllRoles();
   const roleChoices = roles.map(({ role_id, title }) => ({
     name: title,
     value: role_id
   }))
-
   const roleId = await prompt([
     {
       type: "list",
@@ -278,4 +249,10 @@ async function deleteEmployeeRole() {
   console.table(roles)
   await runSearch()
 }
+
+//--------------------------EXIT from app-----------//
+async function exit() {
+  db.quit()
+}
+
 runSearch();

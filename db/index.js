@@ -38,7 +38,9 @@ class DB {
 	removeDepartment(departmentId) {
 		return this.connection.query('DELETE FROM  department WHERE department_id = ?', [departmentId]);
 	}
-	
+	quit() {
+		connection.end()
+	}
 }
 
 module.exports = new DB(connection);
