@@ -9,8 +9,6 @@ CREATE TABLE department
 (
 department_id INT PRIMARY KEY AUTO_INCREMENT,
 name          VARCHAR(30) NOT NULL
-CONSTRAINT fk_role_department FOREIGN KEY (id)
-           REFERENCES role(department_id)
 );
 
 CREATE TABLE role 

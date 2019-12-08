@@ -10,7 +10,7 @@ VALUES('Finance & Accounting'),
 
 
 
-USE employees_db;
+
 
 INSERT INTO role(title, salary, department_id)
 VALUES('Finance Manager', 70850, 1),
@@ -18,7 +18,7 @@ VALUES('Finance Manager', 70850, 1),
       ('Contracts Clerk', 46260, 3),
       ('Purchaser', 52082, 4);
 
-USE employees_db;
+
 
 INSERT INTO employees(first_name, last_name, role_id, manager_id)
 VALUES('Allan', 'Bareford', 2, NULL),
