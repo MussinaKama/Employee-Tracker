@@ -38,6 +38,9 @@ class DB {
 	removeDepartment(departmentId) {
 		return this.connection.query('DELETE FROM  department WHERE department_id = ?', [departmentId]);
 	}
+	updateRole(employee, role) {
+		return this.connection.query("UPDATE employees SET role_id = ? WHERE employee_id = ?", [role, employee])
+	}
 	quit() {
 		connection.end()
 	}

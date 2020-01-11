@@ -46,6 +46,10 @@ const ctable = require("console.table")
           value: "Delete_Employee"
         },
         {
+          name: "Update Employee Role",
+          value: "Update_Employee_Role"
+        },
+        {
           name: "Exit",
           value: "Exit"
         }
@@ -72,6 +76,8 @@ const ctable = require("console.table")
       return deleteEmployeeRole();
     case "Delete_Employee":
       return deleteEmployee();
+    case "Update_Employee_Role":
+      return updateRole();
     default:
       return exit();
   }
@@ -189,10 +195,12 @@ async function addDepartment() {
 //-----------------------------------DELETE DEPARTMENT-------------------------------------------------//
 async function deleteDepartment() {
   const departments = await db.getAllDepartments();
-  const departmentChoices = departments.map(({name, department_id}) => ({
-    name: name,
-    value: department_id
+  console.log(departments)
+  const departmentChoices = departments.map(({department_id, department}) => ({
+    value: department_id,
+    name: department,
   }))
+  console.log(departmentChoices);
 
   const departmentId = await prompt([
     {
@@ -236,6 +244,7 @@ async function deleteEmployeeRole() {
     name: title,
     value: role_id
   }))
+  console.log(roleChoices)
   const roleId = await prompt([
     {
       type: "list",
@@ -255,4 +264,38 @@ async function exit() {
   db.quit()
 }
 
+//------------------------UPDATE EMPLOYEE ROLE-------------------//
+async function updateRole() {
+  const employees = await db.getAllEmployees();
+  console.log(employees);
+  const employeeChoice = employees.map(({employee_id, first_name, last_name}) => ({
+    value: employee_id,
+    name: first_name + " " + last_name
+  }))
+  const allRoles = await db.getAllRoles();
+  console.log(allRoles)
+  const roleChoices = allRoles.map(({ role_id, title }) => ({
+    name: title,
+    value: role_id
+  }))
+  
+  const queryResponse = await prompt([
+    {
+      type: "list",
+      name: "employee",
+      message: "Who's role would you like to change ?",
+      choices: employeeChoice
+    },
+    {
+      type: "list",
+      name: "role",
+      message: "Which role you want to give to this employee ?",
+      choices: roleChoices
+    }
+  ])
+  // console.log(employee)
+  await db.updateRole(queryResponse.employee,queryResponse.role)
+  await runSearch()
+  
+}
 runSearch();
